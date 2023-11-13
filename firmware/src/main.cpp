@@ -332,8 +332,29 @@ static unsigned long int dt = (currentTime - prevTime);
 static unsigned long int loopTime = LOOP_TIME * 1000UL;
 static unsigned long int loopTimeWarning = loopTime + (unsigned long)((float)loopTime*0.95);
 
+updateStatus updateStatus_ = UPDATE_OK;
+
 void setup() {	
-  deviceManager.init(SERIAL_BAUT);
+	initStatus initStatus_ = deviceManager.init();
+	switch (initStatus_){
+		case INIT_OK:
+			log_i("Init performed corectly");
+			break;
+		case CAM_ERROR:
+			log_e("Camera init error");
+			while(1);
+			break;
+		case SD_CARD_ERROR:
+			log_e("SD card init error");
+			while(1);
+			break;
+		case SERVER_ERROR:
+			log_e("Server init error");
+			while(1);
+			break;
+		default:
+			break;
+	}
 }
 
 void loop() {
@@ -344,6 +365,30 @@ void loop() {
 			log_w("Loop time %u limited to %u microseconds.\n",dt,loopTimeWarning);
 		}
 		prevTime = currentTime; 
-		deviceManager.update(dt);
+
+		
+		updateStatus_ = deviceManager.update();
+		switch (updateStatus_){
+			case UPDATE_OK:
+				break;
+			case NONE_STATE_ERROR:
+				log_e("None state error");
+				while(1);
+				break;
+			case TAKEPHOTO_STATE_ERROR:
+				log_e("Take photo state error");
+				while(1);
+				break;
+			case GOTOSLEEP_STATE_ERROR:
+				log_e("Go to sleep state error");
+				while(1);
+				break;
+			case STREAM_STATE_ERROR:
+				log_e("Stream state error");
+				while(1);
+				break;
+			default:
+				break;
+		}
 	}
 }

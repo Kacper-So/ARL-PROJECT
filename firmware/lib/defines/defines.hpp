@@ -1,3 +1,6 @@
+#ifndef __DATA_DEFINES_H__
+#define __DATA_DEFINES_H__
+
 #define LOOP_TIME 10
 #define SERIAL_BAUT 115200
 // Camera pins
@@ -21,3 +24,5 @@
 
 // Photo File Name to save in SPIFFS
 #define FILE_PHOTO "/photo.jpg"
+
+#endif // __DATA_DEFINES_H__

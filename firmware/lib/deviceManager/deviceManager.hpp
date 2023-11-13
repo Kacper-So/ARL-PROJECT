@@ -25,17 +25,24 @@ class DeviceManager{
         ~DeviceManager();
 
 
-        initStatus init(unsigned int serialBaut);
+        initStatus init();
         functionStatus cameraInit();
         functionStatus sdCardInit();
         functionStatus serverInit();
 
-        updateStatus update(unsigned long dt);
+        updateStatus update();
 
+        functionStatus none_update();
+        functionStatus takePhoto_update();
+        functionStatus goToSleep_update();
+        functionStatus stream_update();
+
+        deviceAction currentAction = none;
+        void transitionTo(deviceAction newAction);
+        void stateMachine();
 
         WebServer server();
         camera_config_t config;
-
 
         deviceAction uartBuffer();
         functionStatus takePhoto();
