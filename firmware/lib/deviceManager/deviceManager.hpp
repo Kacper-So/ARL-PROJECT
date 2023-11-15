@@ -18,6 +18,9 @@
 #include "SPI.h"
 #include "defines.hpp"
 #include "structs.hpp"
+#include <WebSocketsServer.h>
+#include <ArduinoJson.h>
+
 
 class DeviceManager{
     public:
@@ -41,7 +44,6 @@ class DeviceManager{
         void transitionTo(deviceAction newAction);
         void stateMachine();
 
-        WebServer server();
         camera_config_t config;
 
         deviceAction uartBuffer();
