@@ -4,7 +4,6 @@
 typedef enum{
     INIT_OK,
     CAM_ERROR,
-    SD_CARD_ERROR,
     SERVER_ERROR
 } initStatus;
 
@@ -16,14 +15,12 @@ typedef enum{
 typedef enum{
     UPDATE_OK,
     NONE_STATE_ERROR,
-    TAKEPHOTO_STATE_ERROR,
     GOTOSLEEP_STATE_ERROR,
     STREAM_STATE_ERROR
 } updateStatus;
 
 typedef enum{
     none,
-    takePhoto,
     goToSleep,
     stream
 } deviceAction;

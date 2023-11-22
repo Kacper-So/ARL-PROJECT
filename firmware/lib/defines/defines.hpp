@@ -22,7 +22,4 @@
 #define HREF_GPIO_NUM     47
 #define PCLK_GPIO_NUM     13
 
-// Photo File Name to save in SPIFFS
-#define FILE_PHOTO "/photo.jpg"
-
 #endif // __DATA_DEFINES_H__

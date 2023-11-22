@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <WebServer.h>
-#include "webpage.h"
+#include "esp32cam.h"
 #include "esp_camera.h"
 #include "esp_timer.h"
 #include "img_converters.h"
@@ -18,9 +18,6 @@
 #include "SPI.h"
 #include "defines.hpp"
 #include "structs.hpp"
-#include <WebSocketsServer.h>
-#include <ArduinoJson.h>
-
 
 class DeviceManager{
     public:
@@ -30,13 +27,11 @@ class DeviceManager{
 
         initStatus init();
         functionStatus cameraInit();
-        functionStatus sdCardInit();
-        functionStatus serverInit();
+        functionStatus wifiInit();
 
         updateStatus update();
 
         functionStatus none_update();
-        functionStatus takePhoto_update();
         functionStatus goToSleep_update();
         functionStatus stream_update();
 
@@ -46,10 +41,7 @@ class DeviceManager{
 
         camera_config_t config;
 
-        deviceAction uartBuffer();
-        functionStatus takePhoto();
-        functionStatus goToSleep();
-        functionStatus startStream();
+        WebServer *server;
 };
 
 extern DeviceManager deviceManager;
