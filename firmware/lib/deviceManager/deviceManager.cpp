@@ -12,6 +12,16 @@ DeviceManager :: ~DeviceManager(){
 }
 
 functionStatus DeviceManager :: cameraInit(){
+    // esp32cam::Config cfg;
+    // cfg.setPins(esp32cam::pins::Seeed);
+    // cfg.setResolution(hiRes);
+    // cfg.setBufferCount(2);
+    // cfg.setJpeg(80);
+
+    // bool ok = Camera.begin(cfg);
+    // Serial.println(ok ? "CAMERA OK" : "CAMERA FAIL");
+
+
     config.ledc_channel = LEDC_CHANNEL_0;
     config.ledc_timer = LEDC_TIMER_0;
     config.pin_d0 = Y2_GPIO_NUM;
