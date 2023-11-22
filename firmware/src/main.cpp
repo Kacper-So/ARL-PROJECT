@@ -89,11 +89,11 @@
 #include <WebServer.h>
 #include <WiFi.h>
 
-const char* WIFI_SSID = "ZONG MBB-E5573-AE26";
-const char* WIFI_PASS = "58688303";
+const char* WIFI_SSID = "realme 8 Pro";
+const char* WIFI_PASS = "2sj3wxae";
 
 WebServer server(80);
-
+static auto ultloRes = esp32cam::Resolution::find(240, 176);
 static auto loRes = esp32cam::Resolution::find(320, 240);
 static auto hiRes = esp32cam::Resolution::find(800, 600);
 
@@ -145,7 +145,7 @@ void serveJpg()
 
 void handleJpgLo()
 {
-  if (!esp32cam::Camera.changeResolution(loRes)) {
+  if (!esp32cam::Camera.changeResolution(ultloRes)) {
     Serial.println("SET-LO-RES FAIL");
   }
   serveJpg();
@@ -193,8 +193,8 @@ void setup()
     Config cfg;
     cfg.setPins(pins::Seeed);
     cfg.setResolution(hiRes);
-    cfg.setBufferCount(2);
-    cfg.setJpeg(80);
+    cfg.setBufferCount(1);
+    cfg.setJpeg(60);
 
     bool ok = Camera.begin(cfg);
     Serial.println(ok ? "CAMERA OK" : "CAMERA FAIL");
