@@ -12,50 +12,70 @@ DeviceManager :: ~DeviceManager(){
 }
 
 functionStatus DeviceManager :: cameraInit(){
-    // esp32cam::Config cfg;
-    // cfg.setPins(esp32cam::pins::Seeed);
-    // cfg.setResolution(hiRes);
-    // cfg.setBufferCount(2);
-    // cfg.setJpeg(80);
+    esp32cam::Config cfg;
+    constexpr esp32cam::Pins Seeed{
+        D0: 15,
+        D1: 17,
+        D2: 18,
+        D3: 16,
+        D4: 14,
+        D5: 12,
+        D6: 11,
+        D7: 48,
+        XCLK: 10,
+        PCLK: 13,
+        VSYNC: 38,
+        HREF: 47,
+        SDA: 40,
+        SCL: 39,
+        RESET: -1,
+        PWDN: -1,
+    };
+    cfg.setPins(Seeed);
+    cfg.setResolution(esp32cam::Resolution::find(160, 120));
+    cfg.setBufferCount(10);
+    cfg.setJpeg(50);
 
-    // bool ok = Camera.begin(cfg);
-    // Serial.println(ok ? "CAMERA OK" : "CAMERA FAIL");
-
-
-    config.ledc_channel = LEDC_CHANNEL_0;
-    config.ledc_timer = LEDC_TIMER_0;
-    config.pin_d0 = Y2_GPIO_NUM;
-    config.pin_d1 = Y3_GPIO_NUM;
-    config.pin_d2 = Y4_GPIO_NUM;
-    config.pin_d3 = Y5_GPIO_NUM;
-    config.pin_d4 = Y6_GPIO_NUM;
-    config.pin_d5 = Y7_GPIO_NUM;
-    config.pin_d6 = Y8_GPIO_NUM;
-    config.pin_d7 = Y9_GPIO_NUM;
-    config.pin_xclk = XCLK_GPIO_NUM;
-    config.pin_pclk = PCLK_GPIO_NUM;
-    config.pin_vsync = VSYNC_GPIO_NUM;
-    config.pin_href = HREF_GPIO_NUM;
-    config.pin_sscb_sda = SIOD_GPIO_NUM;
-    config.pin_sscb_scl = SIOC_GPIO_NUM;
-    config.pin_pwdn = PWDN_GPIO_NUM;
-    config.pin_reset = RESET_GPIO_NUM;
-    config.xclk_freq_hz = 20000000;
-
-
-    config.frame_size = FRAMESIZE_UXGA;
-    config.pixel_format = PIXFORMAT_JPEG; // for streaming
-
-    config.grab_mode = CAMERA_GRAB_WHEN_EMPTY;
-    config.fb_location = CAMERA_FB_IN_PSRAM;
-    config.jpeg_quality = 12;
-    config.fb_count = 1;
-
-    esp_err_t err = esp_camera_init(&config);
-    if (err != ESP_OK) {
+    bool ok = esp32cam::Camera.begin(cfg);
+    if (!ok) {
         return FUNC_NOK;
     }
     return FUNC_OK;
+
+    // config.ledc_channel = LEDC_CHANNEL_0;
+    // config.ledc_timer = LEDC_TIMER_0;
+    // config.pin_d0 = Y2_GPIO_NUM;
+    // config.pin_d1 = Y3_GPIO_NUM;
+    // config.pin_d2 = Y4_GPIO_NUM;
+    // config.pin_d3 = Y5_GPIO_NUM;
+    // config.pin_d4 = Y6_GPIO_NUM;
+    // config.pin_d5 = Y7_GPIO_NUM;
+    // config.pin_d6 = Y8_GPIO_NUM;
+    // config.pin_d7 = Y9_GPIO_NUM;
+    // config.pin_xclk = XCLK_GPIO_NUM;
+    // config.pin_pclk = PCLK_GPIO_NUM;
+    // config.pin_vsync = VSYNC_GPIO_NUM;
+    // config.pin_href = HREF_GPIO_NUM;
+    // config.pin_sscb_sda = SIOD_GPIO_NUM;
+    // config.pin_sscb_scl = SIOC_GPIO_NUM;
+    // config.pin_pwdn = PWDN_GPIO_NUM;
+    // config.pin_reset = RESET_GPIO_NUM;
+    // config.xclk_freq_hz = 20000000;
+
+
+    // config.frame_size = FRAMESIZE_UXGA;
+    // config.pixel_format = PIXFORMAT_JPEG; // for streaming
+
+    // config.grab_mode = CAMERA_GRAB_WHEN_EMPTY;
+    // config.fb_location = CAMERA_FB_IN_PSRAM;
+    // config.jpeg_quality = 12;
+    // config.fb_count = 1;
+
+    // esp_err_t err = esp_camera_init(&config);
+    // if (err != ESP_OK) {
+    //     return FUNC_NOK;
+    // }
+    // return FUNC_OK;
 }
 
 functionStatus DeviceManager :: wifiInit(){
@@ -129,9 +149,8 @@ functionStatus DeviceManager:: goToSleep_update(){
 }
 
 functionStatus DeviceManager:: stream_update(){
+    server->handleClient();
     return FUNC_OK;
 }
-
-
 
 DeviceManager deviceManager = DeviceManager();

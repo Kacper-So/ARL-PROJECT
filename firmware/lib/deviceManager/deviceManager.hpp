@@ -35,7 +35,7 @@ class DeviceManager{
         functionStatus goToSleep_update();
         functionStatus stream_update();
 
-        deviceAction currentAction = none;
+        deviceAction currentAction = stream;
         void transitionTo(deviceAction newAction);
         void stateMachine();
 
