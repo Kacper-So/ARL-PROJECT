@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <WebServer.h>
+#include "esp_sleep.h"
 #include "esp32cam.h"
 #include "esp_camera.h"
 #include "esp_timer.h"
@@ -40,7 +41,9 @@ class DeviceManager{
         void stateMachine();
 
         camera_config_t config;
-
+        bool stream_status = false;
+        int imgType = 0;
+        esp32cam::Resolution res = esp32cam::Resolution::find(160, 120);
         WebServer *server;
 };
 

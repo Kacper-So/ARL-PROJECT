@@ -32,50 +32,18 @@ functionStatus DeviceManager :: cameraInit(){
         PWDN: -1,
     };
     cfg.setPins(Seeed);
-    cfg.setResolution(esp32cam::Resolution::find(160, 120));
+    cfg.setResolution(res);
     cfg.setBufferCount(10);
-    cfg.setJpeg(50);
+    if(imgType == 0) cfg.setJpeg(50);
+    if(imgType == 1) cfg.setRgb();
+    if(imgType == 2) cfg.setYuv();
+    if(imgType == 3) cfg.setGrayscale();
 
     bool ok = esp32cam::Camera.begin(cfg);
     if (!ok) {
         return FUNC_NOK;
     }
     return FUNC_OK;
-
-    // config.ledc_channel = LEDC_CHANNEL_0;
-    // config.ledc_timer = LEDC_TIMER_0;
-    // config.pin_d0 = Y2_GPIO_NUM;
-    // config.pin_d1 = Y3_GPIO_NUM;
-    // config.pin_d2 = Y4_GPIO_NUM;
-    // config.pin_d3 = Y5_GPIO_NUM;
-    // config.pin_d4 = Y6_GPIO_NUM;
-    // config.pin_d5 = Y7_GPIO_NUM;
-    // config.pin_d6 = Y8_GPIO_NUM;
-    // config.pin_d7 = Y9_GPIO_NUM;
-    // config.pin_xclk = XCLK_GPIO_NUM;
-    // config.pin_pclk = PCLK_GPIO_NUM;
-    // config.pin_vsync = VSYNC_GPIO_NUM;
-    // config.pin_href = HREF_GPIO_NUM;
-    // config.pin_sscb_sda = SIOD_GPIO_NUM;
-    // config.pin_sscb_scl = SIOC_GPIO_NUM;
-    // config.pin_pwdn = PWDN_GPIO_NUM;
-    // config.pin_reset = RESET_GPIO_NUM;
-    // config.xclk_freq_hz = 20000000;
-
-
-    // config.frame_size = FRAMESIZE_UXGA;
-    // config.pixel_format = PIXFORMAT_JPEG; // for streaming
-
-    // config.grab_mode = CAMERA_GRAB_WHEN_EMPTY;
-    // config.fb_location = CAMERA_FB_IN_PSRAM;
-    // config.jpeg_quality = 12;
-    // config.fb_count = 1;
-
-    // esp_err_t err = esp_camera_init(&config);
-    // if (err != ESP_OK) {
-    //     return FUNC_NOK;
-    // }
-    // return FUNC_OK;
 }
 
 functionStatus DeviceManager :: wifiInit(){
@@ -105,12 +73,120 @@ void DeviceManager :: transitionTo(deviceAction newAction){
 }
 
 void DeviceManager :: stateMachine(){
-    if(Serial.available() == 1){
-        transitionTo(stream);
-    } else if(Serial.available() == 0) {
-        transitionTo(none);
-    } else {
-        transitionTo(none);
+    if (Serial.available() > 0) {
+        String receivedMessage = Serial.readStringUntil('\n');
+
+        String command = receivedMessage.substring(0, 3);
+        int argument = receivedMessage.substring(4).toInt();
+
+        if (command == "STR") {
+            deviceManager.stream_status = true;
+            Serial.println("stream on");
+            transitionTo(stream);
+        } else if (command == "STP"){
+            deviceManager.stream_status = false;
+            Serial.println("stream off");
+            transitionTo(none);
+        } else if (command == "SLP"){
+            transitionTo(goToSleep);
+        } else if (command == "RES"){
+            if (!deviceManager.stream_status){
+                switch (argument){
+                case 1:
+                    res = esp32cam::Resolution::find(96, 96);
+                    esp32cam::Camera.end();
+                    cameraInit();
+                    break;
+                case 2:
+                    res = esp32cam::Resolution::find(160, 120);
+                    esp32cam::Camera.end();
+                    cameraInit();
+                    break;
+                case 3:
+                    res = esp32cam::Resolution::find(176, 144);
+                    esp32cam::Camera.end();
+                    cameraInit();
+                    break;
+                case 4:
+                    res = esp32cam::Resolution::find(240, 176);
+                    esp32cam::Camera.end();
+                    cameraInit();
+                    break;
+                case 5:
+                    res = esp32cam::Resolution::find(240, 240);
+                    esp32cam::Camera.end();
+                    cameraInit();
+                    break;
+                case 6:
+                    res = esp32cam::Resolution::find(320, 240);
+                    esp32cam::Camera.end();
+                    cameraInit();
+                    break;
+                case 7:
+                    res = esp32cam::Resolution::find(400, 296);
+                    esp32cam::Camera.end();
+                    cameraInit();
+                    break;
+                case 8:
+                    res = esp32cam::Resolution::find(480, 320);
+                    esp32cam::Camera.end();
+                    cameraInit();
+                    break;
+                case 9:
+                    res = esp32cam::Resolution::find(640, 480);
+                    esp32cam::Camera.end();
+                    cameraInit();
+                    break;
+                case 10:
+                    res = esp32cam::Resolution::find(800, 600);
+                    esp32cam::Camera.end();
+                    cameraInit();
+                    break;
+                default:
+                    Serial.println("ERR");
+                    break;
+                }
+            } else {
+                Serial.println("ERR");
+            }
+        } else if (command == "FMT"){
+            if (!deviceManager.stream_status){
+                switch (argument){
+                case 1:
+                    imgType = 0;
+                    esp32cam::Camera.end();
+                    cameraInit();
+                    break;
+                case 2:
+                    imgType = 1;
+                    esp32cam::Camera.end();
+                    cameraInit();
+                    break;
+                case 3:
+                    imgType = 2;
+                    esp32cam::Camera.end();
+                    cameraInit();
+                    break;
+                case 4:
+                    imgType = 3;
+                    esp32cam::Camera.end();
+                    cameraInit();
+                    break;
+                case 5:
+                    imgType = 4;
+                    esp32cam::Camera.end();
+                    cameraInit();
+                    break;
+                default:
+                    Serial.println("ERR");
+                    break;
+                }
+            } else {
+                Serial.println("ERR");
+            }
+        } else {
+            Serial.println("ERR");
+        }
     }
 }
 
@@ -149,7 +225,6 @@ functionStatus DeviceManager:: goToSleep_update(){
 }
 
 functionStatus DeviceManager:: stream_update(){
-    // server->handleClient();
     return FUNC_OK;
 }
 
