@@ -149,7 +149,7 @@ functionStatus DeviceManager:: goToSleep_update(){
 }
 
 functionStatus DeviceManager:: stream_update(){
-    server->handleClient();
+    // server->handleClient();
     return FUNC_OK;
 }
 

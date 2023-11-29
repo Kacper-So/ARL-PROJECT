@@ -1,7 +1,7 @@
 #ifndef __DATA_DEFINES_H__
 #define __DATA_DEFINES_H__
 
-#define LOOP_TIME 10
+#define LOOP_TIME 100
 #define SERIAL_BAUT 115200
 // Camera pins
 #define PWDN_GPIO_NUM     -1

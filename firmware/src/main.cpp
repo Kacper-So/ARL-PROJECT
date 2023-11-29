@@ -44,7 +44,7 @@ void setup() {
 		default:
 			break;
 	}
-  deviceManager.server->on("/cam.bmp", handle_stream);
+  deviceManager.server->on("/cam-lo.jpg", handle_stream);
   deviceManager.server->begin();
 }
 
@@ -77,6 +77,7 @@ void loop() {
 			default:
 				break;
 		}
+		deviceManager.server->handleClient();
 	}
 }
 
@@ -186,10 +187,28 @@ void loop() {
 //   {
 //     using namespace esp32cam;
 //     Config cfg;
-//     cfg.setPins(pins::Seeed);
-//     cfg.setResolution(hiRes);
-//     cfg.setBufferCount(1);
-//     cfg.setJpeg(60);
+// 	constexpr esp32cam::Pins Seeed{
+//         D0: 15,
+//         D1: 17,
+//         D2: 18,
+//         D3: 16,
+//         D4: 14,
+//         D5: 12,
+//         D6: 11,
+//         D7: 48,
+//         XCLK: 10,
+//         PCLK: 13,
+//         VSYNC: 38,
+//         HREF: 47,
+//         SDA: 40,
+//         SCL: 39,
+//         RESET: -1,
+//         PWDN: -1,
+//     };
+//     cfg.setPins(Seeed);
+//     cfg.setResolution(ultloRes);
+//     cfg.setBufferCount(10);
+//     cfg.setJpeg(50);
 
 //     bool ok = Camera.begin(cfg);
 //     Serial.println(ok ? "CAMERA OK" : "CAMERA FAIL");
