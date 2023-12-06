@@ -75,8 +75,9 @@ void DeviceManager :: transitionTo(deviceAction newAction){
 
 void DeviceManager :: stateMachine(){
     if (Serial.available() > 0) {
+        Serial.println("odebrano");
         String receivedMessage = Serial.readStringUntil('\n');
-
+        Serial.println(receivedMessage);
         String command = receivedMessage.substring(0, 3);
         int argument = receivedMessage.substring(4).toInt();
 
