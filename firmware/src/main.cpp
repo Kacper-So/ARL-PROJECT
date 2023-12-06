@@ -1,7 +1,5 @@
 #include "deviceManager.hpp"
 
-RTC_DATA_ATTR esp_sleep_source_t WakeUpSource;
-
 static unsigned long int currentTime = micros();
 static unsigned long int prevTime = 0 ;
 static unsigned long int dt = (currentTime - prevTime); 

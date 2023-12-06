@@ -62,6 +62,7 @@ functionStatus DeviceManager :: wifiInit(){
 
 initStatus DeviceManager :: init(){
     Serial.begin(SERIAL_BAUT);
+    esp_sleep_enable_ext0_wakeup(GPIO_NUM_2,1);
     if(cameraInit() == FUNC_NOK) return CAM_ERROR;
     if(wifiInit() == FUNC_NOK) return SERVER_ERROR;
 
@@ -221,6 +222,7 @@ functionStatus DeviceManager:: none_update(){
 
 functionStatus DeviceManager:: goToSleep_update(){
     // Serial.println("goToSleep update");
+    esp_deep_sleep_start();
     return FUNC_OK;
 }
 
